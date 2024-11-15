@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель</title>
+</head>
+<body>
+    <h1>Добро пожаловать в админ панель</h1>
+    <a href="/logout">Выйти</a>
+
+    <h2>Добавить нового пользователя OpenVPN</h2>
+    <form action="/add-user" method="POST">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required pattern="^[a-zA-Z0-9_-]+$" title="Допустимы только буквы, цифры, символы подчеркивания и дефисы.">
+        
+        <input id="password" name="password" type="hidden" value="no">
+        
+        <button type="submit">Добавить пользователя</button>
+    </form>
+
+    <h2>Список всех пользователей OpenVPN</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Имя пользователя</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (users.length > 0) { %>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user %></td>
+                        <td>
+                            <form action="/delete-user" method="POST" style="display:inline;">
+                                <input type="hidden" name="username" value="<%= user %>">
+                                <button type="submit" onclick="return confirm('Удалить пользователя <%= user %>?');">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="2">Нет пользователей</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>
